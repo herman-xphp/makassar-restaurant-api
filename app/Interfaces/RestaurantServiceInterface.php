@@ -69,4 +69,13 @@ interface RestaurantServiceInterface
      * @return array
      */
     public function searchRestaurants(string $query, array $filters = [], int $limit = 20, $userLat = null, $userLon = null, int $offset = 0);
+
+    /**
+     * Get paginated restaurants (for Admin Dashboard)
+     *
+     * @param int $perPage
+     * @param string|null $search
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getPaginatedRestaurants($perPage = 10, $search = null);
 }

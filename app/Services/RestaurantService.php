@@ -72,4 +72,12 @@ class RestaurantService implements RestaurantServiceInterface
     {
         return $this->restaurantRepository->searchRestaurants($query, $filters, $limit, $userLat, $userLon, $offset);
     }
+
+    /**
+     * Get paginated restaurants (for Admin Dashboard)
+     */
+    public function getPaginatedRestaurants($perPage = 10, $search = null)
+    {
+        return $this->restaurantRepository->getPaginatedRestaurants($perPage, $search);
+    }
 }

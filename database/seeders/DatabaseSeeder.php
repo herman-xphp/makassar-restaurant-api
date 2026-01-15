@@ -28,5 +28,6 @@ class DatabaseSeeder extends Seeder
 
         // Run restaurant seeder
         $this->call(RestaurantSeeder::class);
+        $this->call(AdminUserSeeder::class);
     }
 }

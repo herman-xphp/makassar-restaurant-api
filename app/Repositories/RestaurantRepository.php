@@ -132,4 +132,26 @@ class RestaurantRepository implements RestaurantRepositoryInterface
 
         return $builder->skip($offset)->take($limit)->get();
     }
+
+    /**
+     * Get paginated restaurants (for Admin Dashboard)
+     *
+     * @param int $perPage
+     * @param string|null $search
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getPaginatedRestaurants($perPage = 10, $search = null)
+    {
+        $query = Restaurant::query();
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('address', 'like', "%{$search}%")
+                  ->orWhere('cuisine_type', 'like', "%{$search}%");
+            });
+        }
+
+        return $query->latest()->paginate($perPage);
+    }
 }
