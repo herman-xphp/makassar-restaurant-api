@@ -114,3 +114,93 @@ server {
 -   [ ] **SSL/TLS**: Use Certbot (`certbot --nginx`) to enable HTTPS.
 -   [ ] **Firewall**: Setup UFW to allow only SSH (22), HTTP (80), and HTTPS (443).
 -   [ ] **Backups**: Schedule daily backups of `database.sqlite` (or your database) and `storage/app/public`.
+
+## Shared Hosting Deployment (cPanel / MySQL)
+
+Since you are using Shared Hosting with MySQL, the process differs slightly as you may not have root access.
+
+### 1. Preparation (Local)
+
+1.  **Build Assets**:
+    Run this locally since Node.js might not be available on shared hosting.
+
+    ```bash
+    npm run build
+    ```
+
+2.  **Prepare Files**:
+    Zip your entire project excluding `node_modules` and `.git`.
+
+### 2. Upload to Server
+
+1.  **File Manager**:
+
+    -   Upload your project zip to a folder _above_ `public_html` (e.g., `/home/username/makassar-app`).
+    -   Extract the files.
+
+2.  **Public Folder**:
+
+    -   Move the contents of your project's `public/` folder to your public directory (e.g., `public_html` or `public_html/subdomain`).
+    -   Edit `index.php` in that public folder:
+
+    ```php
+    // Update paths to point to your project folder
+    require __DIR__.'/../makassar-app/storage/framework/maintenance.php';
+    require __DIR__.'/../makassar-app/vendor/autoload.php';
+    $app = require_once __DIR__.'/../makassar-app/bootstrap/app.php';
+    ```
+
+### 3. Database Setup (MySQL)
+
+1.  **Create Database**:
+
+    -   Go to cPanel > MySQL Database Wizard.
+    -   Create a database (e.g., `username_makassar`).
+    -   Create a user (e.g., `username_admin`) and password.
+    -   **Grant All Privileges** to the user for that database.
+
+2.  **Environment Config**:
+
+    -   Edit `.env` in your project folder (`/home/username/makassar-app/.env`).
+
+    ```env
+    APP_ENV=production
+    APP_DEBUG=false
+    APP_URL=https://your-domain.com
+
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=username_makassar
+    DB_USERNAME=username_admin
+    DB_PASSWORD=your_secure_password
+    ```
+
+### 4. Migrations & Symlink
+
+If you have SSH access (Terminal) in cPanel:
+
+```bash
+cd /home/username/makassar-app
+php artisan migrate --force
+php artisan storage:link
+php artisan optimize
+```
+
+**If NO SSH Access:**
+
+1.  **Migrations**: You might need to import a local SQL dump via phpMyAdmin.
+    -   Locally: `php artisan migrate` (ensuring .env points to a local mysql equivalent) -> Export SQL.
+    -   Server: Import SQL via phpMyAdmin.
+2.  **Storage Link**: You can create a PHP script in your public folder to create the link once:
+    ```php
+    <?php
+    symlink('/home/username/makassar-app/storage/app/public', '/home/username/public_html/storage');
+    echo "Symlink Created";
+    ?>
+    ```
+    Run it via browser `your-domain.com/link.php`, then delete it.
+
+### 5. .htaccess (Apache)
+
+Ensure you have the default Laravel `.htaccess` in your public folder. If you are serving from a subdirectory, you might need to adjust `RewriteBase`.
