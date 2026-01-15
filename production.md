@@ -128,29 +128,7 @@ Since you are using Shared Hosting with MySQL, the process differs slightly as y
     npm run build
     ```
 
-2.  **Prepare Files**:
-    Zip your entire project excluding `node_modules` and `.git`.
-
-### 2. Upload to Server
-
-1.  **File Manager**:
-
-    -   Upload your project zip to a folder _above_ `public_html` (e.g., `/home/username/makassar-app`).
-    -   Extract the files.
-
-2.  **Public Folder**:
-
-    -   Move the contents of your project's `public/` folder to your public directory (e.g., `public_html` or `public_html/subdomain`).
-    -   Edit `index.php` in that public folder:
-
-    ```php
-    // Update paths to point to your project folder
-    require __DIR__.'/../makassar-app/storage/framework/maintenance.php';
-    require __DIR__.'/../makassar-app/vendor/autoload.php';
-    $app = require_once __DIR__.'/../makassar-app/bootstrap/app.php';
-    ```
-
-### 3. Database Setup (MySQL)
+### 4. Database Setup (MySQL)
 
 1.  **Create Database**:
 
@@ -176,7 +154,7 @@ Since you are using Shared Hosting with MySQL, the process differs slightly as y
     DB_PASSWORD=your_secure_password
     ```
 
-### 4. Migrations & Symlink
+### 5. Migrations & Symlink
 
 If you have SSH access (Terminal) in cPanel:
 
@@ -201,6 +179,6 @@ php artisan optimize
     ```
     Run it via browser `your-domain.com/link.php`, then delete it.
 
-### 5. .htaccess (Apache)
+### 6. .htaccess (Apache)
 
 Ensure you have the default Laravel `.htaccess` in your public folder. If you are serving from a subdirectory, you might need to adjust `RewriteBase`.
