@@ -8,50 +8,50 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-gradient-to-br from-blue-500 to-blue-600 overflow-hidden shadow-lg sm:rounded-xl">
                     <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-blue-500 bg-opacity-10">
-                                <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-blue-100 text-sm font-medium mb-1">Total Restoran</p>
+                                <p class="text-3xl font-bold text-white">{{ \App\Models\Restaurant::count() }}</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-white/20 backdrop-blur-sm">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                 </svg>
                             </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-500">Total Restoran</p>
-                                <p class="text-2xl font-semibold text-gray-900">{{ \App\Models\Restaurant::count() }}</p>
-                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 overflow-hidden shadow-lg sm:rounded-xl">
                     <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-green-500 bg-opacity-10">
-                                <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-emerald-100 text-sm font-medium mb-1">Rata-rata Rating</p>
+                                <p class="text-3xl font-bold text-white">{{ number_format(\App\Models\Restaurant::avg('rating') ?? 0, 1) }}</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-white/20 backdrop-blur-sm">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
                                 </svg>
                             </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-500">Rata-rata Rating</p>
-                                <p class="text-2xl font-semibold text-gray-900">{{ number_format(\App\Models\Restaurant::avg('rating') ?? 0, 1) }}</p>
-                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-gradient-to-br from-purple-500 to-purple-600 overflow-hidden shadow-lg sm:rounded-xl">
                     <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-purple-500 bg-opacity-10">
-                                <svg class="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-purple-100 text-sm font-medium mb-1">Jenis Masakan</p>
+                                <p class="text-3xl font-bold text-white">{{ \App\Models\Restaurant::distinct('cuisine_type')->count('cuisine_type') }}</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-white/20 backdrop-blur-sm">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
                                 </svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-500">Jenis Masakan</p>
-                                <p class="text-2xl font-semibold text-gray-900">{{ \App\Models\Restaurant::distinct('cuisine_type')->count('cuisine_type') }}</p>
                             </div>
                         </div>
                     </div>
