@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 
 <head>
     <meta charset="utf-8">
@@ -30,27 +30,34 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="antialiased bg-gray-50">
+<body class="antialiased bg-gray-50 font-sans text-gray-900 scroll-smooth">
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm">
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md shadow-sm transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+            <div class="flex justify-between h-20">
                 <div class="flex items-center">
-                    <x-application-logo class="h-10 w-10 text-emerald-500" />
-                    <span class="ml-3 text-xl font-bold text-gray-800">Makassar Restaurant</span>
+                    <a href="#" class="flex items-center group">
+                        <x-application-logo class="h-10 w-10 text-emerald-500 group-hover:scale-110 transition-transform" />
+                        <span class="ml-3 text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-500">Makassar Restaurant</span>
+                    </a>
                 </div>
-                <div class="flex items-center space-x-4">
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-sm font-medium text-gray-600 hover:text-emerald-500 transition">Beranda</a>
+                    <a href="#features" class="text-sm font-medium text-gray-600 hover:text-emerald-500 transition">Fitur</a>
+                    <a href="#popular" class="text-sm font-medium text-gray-600 hover:text-emerald-500 transition">Populer</a>
+                    <a href="#download" class="text-sm font-medium text-gray-600 hover:text-emerald-500 transition">Download</a>
+                    
                     @auth
                         <a href="{{ url('/dashboard') }}"
-                            class="px-4 py-2 text-sm font-medium text-white bg-emerald-500 hover:bg-emerald-600 rounded-lg">Dashboard</a>
+                            class="px-5 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5">
+                            Dashboard
+                        </a>
                     @else
                         <a href="https://www.mediafire.com/file/j5d7v1q36mr7813/Makassar_Restaurant.apk"
-                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-emerald-500 hover:bg-emerald-600 rounded-lg">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                            </svg>
-                            Download Aplikasi
+                            class="px-5 py-2.5 text-sm font-bold text-emerald-600 bg-emerald-50 border-2 border-emerald-100 hover:bg-emerald-100 rounded-full transition-colors">
+                            Masuk
                         </a>
                     @endauth
                 </div>
@@ -59,7 +66,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <div class="relative bg-gray-900 overflow-hidden">
+    <div id="home" class="relative bg-gray-900 overflow-hidden pt-20">
         <!-- Background Image -->
         <div class="absolute inset-0">
             <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop" 
@@ -349,7 +356,8 @@
     </div>
 
     <!-- Restaurant Preview -->
-    <div class="bg-white py-20">
+    <div id="popular" class="bg-white py-20 relative">
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">Restoran Populer</h2>
@@ -394,7 +402,10 @@
     </div>
 
     <!-- CTA Section -->
-    <div class="bg-gradient-to-br from-emerald-500 to-teal-600 py-16">
+    <div id="download" class="bg-gradient-to-br from-emerald-600 to-teal-700 py-24 relative overflow-hidden">
+        <!-- Abstract Shapes -->
+        <div class="absolute top-0 left-0 w-64 h-64 bg-white opacity-5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-emerald-400 opacity-10 rounded-full translate-x-1/3 translate-y-1/3"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-3xl font-bold text-white mb-4">Jelajahi Kuliner Makassar</h2>
             <p class="text-emerald-100 mb-8 max-w-xl mx-auto">Download aplikasi sekarang dan temukan restoran terbaik di
@@ -410,15 +421,65 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-400 py-12">
+    <!-- Professional Footer -->
+    <footer class="bg-gray-900 text-gray-300 pt-20 pb-10 border-t border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="flex items-center mb-4 md:mb-0">
-                    <x-application-logo class="h-8 w-8 text-emerald-500" />
-                    <span class="ml-2 text-white font-semibold">Makassar Restaurant</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <!-- Brand Column -->
+                <div class="col-span-1 lg:col-span-1">
+                    <div class="flex items-center mb-6">
+                        <x-application-logo class="h-10 w-10 text-emerald-500" />
+                        <span class="ml-3 text-2xl font-bold text-white">Makassar<br>Restaurant</span>
+                    </div>
+                    <p class="text-sm leading-relaxed text-gray-400 mb-6">
+                        Platform referensi kuliner nomor satu di Makassar. Kami menghubungkan Anda dengan cita rasa otentik yang tak terlupakan.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition"><span class="sr-only">Facebook</span><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"/></svg></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><span class="sr-only">Instagram</span><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772 4.902 4.902 0 011.772-1.153c.636-.247 1.363-.416 2.427-.465C9.673 2.013 10.03 2 12.48 2h-.165zm-3.77 1.795c-.95.043-1.458.204-1.8.336-.452.175-.776.383-1.115.722-.338.339-.546.663-.722 1.115-.132.342-.293.85-.336 1.8-.043.95-.045 1.232-.045 3.79s.002 2.84.045 3.79c.043.95.204 1.458.336 1.8.175.453.383.776.722 1.115.339.338.663.546 1.115.722.342.132.85.293 1.8.336.95.043 1.232.045 3.79.045s2.84-.002 3.79-.045c.95-.043 1.458-.204 1.8-.336.452-.175.776-.383 1.115-.722.339-.338.546-.663.722-1.115.132-.342.293-.85.336-1.8.043-.95.045-1.232.045-3.79s-.002-2.84-.045-3.79c-.043-.95-.204-1.458-.336-1.8-.175-.453-.383-.776-1.115-.722-.342-.132-.85-.293-1.8-.336-.95-.043-1.232-.045-3.79-.045s-2.84.002-3.79.045zM12.315 6.845a5.155 5.155 0 110 10.31 5.155 5.155 0 010-10.31zm0 1.884a3.271 3.271 0 100 6.542 3.271 3.271 0 000-6.542zm5.722-3.858a1.258 1.258 0 110 2.516 1.258 1.258 0 010-2.516z" clip-rule="evenodd" /></svg></a>
+                    </div>
                 </div>
-                <p class="text-sm">&copy; {{ date('Y') }} Makassar Restaurant. All rights reserved.</p>
+
+                <!-- Product -->
+                <div>
+                    <h3 class="text-sm font-semibold text-white tracking-wider uppercase mb-4">Produk</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#features" class="text-gray-400 hover:text-emerald-500 transition">Fitur Utama</a></li>
+                        <li><a href="#popular" class="text-gray-400 hover:text-emerald-500 transition">Restoran Populer</a></li>
+                        <li><a href="#download" class="text-gray-400 hover:text-emerald-500 transition">Download App</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-emerald-500 transition">Roadmap</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div>
+                    <h3 class="text-sm font-semibold text-white tracking-wider uppercase mb-4">Dukungan</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-emerald-500 transition">Pusat Bantuan</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-emerald-500 transition">Syarat & Ketentuan</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-emerald-500 transition">Kebijakan Privasi</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-emerald-500 transition">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h3 class="text-sm font-semibold text-white tracking-wider uppercase mb-4">Newsletter</h3>
+                    <p class="text-xs text-gray-400 mb-4">Dapatkan info kuliner terbaru setiap minggu.</p>
+                    <form class="flex flex-col space-y-2">
+                        <input type="email" placeholder="Email Anda" class="bg-gray-800 border-gray-700 text-white text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full p-2.5">
+                        <button type="button" class="text-white bg-emerald-600 hover:bg-emerald-700 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center transition">Langganan</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-sm text-gray-500">&copy; {{ date('Y') }} Makassar Restaurant. Dibuat dengan ❤ untuk Pecinta Kuliner.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-sm text-gray-500 hover:text-white transition">Privacy</a>
+                    <a href="#" class="text-sm text-gray-500 hover:text-white transition">Terms</a>
+                    <a href="#" class="text-sm text-gray-500 hover:text-white transition">Cookies</a>
+                </div>
             </div>
         </div>
     </footer>
