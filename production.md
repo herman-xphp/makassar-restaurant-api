@@ -1,0 +1,116 @@
+# Production Deployment Guide
+
+This guide outlines the steps and best practices for deploying the **Makassar Restaurant API** to a production environment.
+
+## Server Requirements
+
+-   **Linux** (Ubuntu 22.04 LTS recommended)
+-   **Web Server**: Nginx (preferred) or Apache
+-   **PHP**: 8.2+ with extensions (`bcmath`, `ctype`, `fileinfo`, `json`, `mbstring`, `openssl`, `pdo`, `tokenizer`, `xml`, `sqlite3` or `mysql`)
+-   **Consumer**: Supervisor (for queue workers, if needed)
+
+## Setup Steps
+
+1.  **Clone Release**
+
+    Clone the repository to `/var/www/makassar-restaurant-api`.
+
+    ```bash
+    git clone https://github.com/your-username/makassar-restaurant-api.git .
+    git checkout main # Deployment should be from main/release branch
+    ```
+
+2.  **Dependencies**
+
+    Install optimized class maps and no dev dependencies:
+
+    ```bash
+    composer install --optimize-autoloader --no-dev
+    ```
+
+    Build frontend assets for production:
+
+    ```bash
+    npm ci
+    npm run build
+    ```
+
+3.  **Environment**
+
+    ```bash
+    cp .env.example .env
+    nano .env
+    ```
+
+    **Critical Production Settings:**
+
+    -   `APP_ENV=production`
+    -   `APP_DEBUG=false`
+    -   `APP_KEY=` (Run `php artisan key:generate`)
+    -   `DB_CONNECTION=` (Use MySQL/MariaDB/PostgreSQL for heavy loads, though SQLite is fine for small scale)
+
+4.  **Permissions**
+
+    Ensure the web server user (`www-data`) owns the storage logs:
+
+    ```bash
+    chown -R www-data:www-data storage bootstrap/cache
+    chmod -R 775 storage bootstrap/cache
+    ```
+
+5.  **Database & Optimization**
+
+    ```bash
+    # Migrate Forcefully
+    php artisan migrate --force
+
+    # Cache Configuration
+    php artisan config:cache
+    php artisan event:cache
+    php artisan route:cache
+    php artisan view:cache
+    ```
+
+## Web Server Configuration (Nginx Example)
+
+Create a configuration file in `/etc/nginx/sites-available/makassar-restaurant`.
+
+```nginx
+server {
+    listen 80;
+    server_name example.com;
+    root /var/www/makassar-restaurant-api/public;
+
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-Content-Type-Options "nosniff";
+
+    index index.php;
+
+    charset utf-8;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    error_page 404 /index.php;
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+}
+```
+
+## Security Checklist
+
+-   [ ] **SSL/TLS**: Use Certbot (`certbot --nginx`) to enable HTTPS.
+-   [ ] **Firewall**: Setup UFW to allow only SSH (22), HTTP (80), and HTTPS (443).
+-   [ ] **Backups**: Schedule daily backups of `database.sqlite` (or your database) and `storage/app/public`.
