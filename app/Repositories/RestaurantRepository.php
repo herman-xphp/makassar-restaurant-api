@@ -154,4 +154,24 @@ class RestaurantRepository implements RestaurantRepositoryInterface
 
         return $query->latest()->paginate($perPage);
     }
+
+    /**
+     * Get restaurant statistics
+     */
+    public function getStats()
+    {
+        return [
+            'total' => Restaurant::count(),
+            'cuisine_types' => Restaurant::distinct('cuisine_type')->count('cuisine_type'),
+            'avg_rating' => Restaurant::avg('rating') ?? 0,
+        ];
+    }
+    
+    /**
+     * Get popular restaurants
+     */
+    public function getPopularRestaurants($limit = 6)
+    {
+        return Restaurant::orderBy('rating', 'desc')->take($limit)->get();
+    }
 }

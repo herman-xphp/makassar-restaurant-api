@@ -83,4 +83,8 @@ interface RestaurantRepositoryInterface
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function getPaginatedRestaurants($perPage = 10, $search = null);
+
+    public function getStats();
+    
+    public function getPopularRestaurants($limit = 6);
 }

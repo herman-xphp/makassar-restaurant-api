@@ -32,6 +32,10 @@ interface RestaurantServiceInterface
      */
     public function getRestaurantBySlug($slug);
 
+    public function getStats();
+
+    public function getPopularRestaurants($limit = 6);
+
     /**
      * Create a new restaurant
      *

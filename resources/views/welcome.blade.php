@@ -59,8 +59,14 @@
     </nav>
 
     <!-- Hero Section -->
-    <div class="relative bg-gradient-to-br from-emerald-500 to-teal-600 overflow-hidden">
-        <div class="absolute inset-0 bg-black opacity-10"></div>
+    <div class="relative bg-gray-900 overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop" 
+                 alt="Background" 
+                 class="w-full h-full object-cover opacity-40">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-r from-emerald-900/90 to-teal-900/80"></div>
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <!-- Left Column - Tagline & CTA -->
@@ -276,17 +282,17 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white rounded-xl shadow-lg p-6 text-center">
-                <div class="text-4xl font-bold text-emerald-500">{{ \App\Models\Restaurant::count() }}</div>
+                <div class="text-4xl font-bold text-emerald-500">{{ $totalRestaurants }}</div>
                 <div class="text-gray-600 mt-2">Restoran Terdaftar</div>
             </div>
             <div class="bg-white rounded-xl shadow-lg p-6 text-center">
                 <div class="text-4xl font-bold text-emerald-500">
-                    {{ \App\Models\Restaurant::distinct('cuisine_type')->count('cuisine_type') }}</div>
+                    {{ $cuisineTypes }}</div>
                 <div class="text-gray-600 mt-2">Jenis Masakan</div>
             </div>
             <div class="bg-white rounded-xl shadow-lg p-6 text-center">
                 <div class="text-4xl font-bold text-emerald-500">
-                    {{ number_format(\App\Models\Restaurant::avg('rating') ?? 0, 1) }}</div>
+                    {{ number_format($avgRating, 1) }}</div>
                 <div class="text-gray-600 mt-2">Rating Rata-rata</div>
             </div>
         </div>
@@ -350,7 +356,7 @@
                 <p class="text-gray-600">Beberapa restoran terbaik yang bisa Anda temukan</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @foreach(\App\Models\Restaurant::orderBy('rating', 'desc')->take(6)->get() as $restaurant)
+                @foreach($popularRestaurants as $restaurant)
                     <div class="bg-gray-50 rounded-xl overflow-hidden hover:shadow-lg transition">
                         @if($restaurant->image_url)
                             <img src="{{ $restaurant->image_url }}" alt="{{ $restaurant->name }}"
