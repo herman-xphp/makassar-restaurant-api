@@ -70,12 +70,10 @@
 
                             <div>
                                 <x-input-label for="image" :value="__('Gambar')" class="text-slate-700 font-medium" />
-                                @if ($restaurant->image_url)
-                                    <div class="mt-2 mb-3">
-                                        <img src="{{ $restaurant->image_url }}" alt="{{ $restaurant->name }}" class="h-32 w-32 object-cover rounded-lg shadow-sm">
-                                        <p class="text-xs text-slate-500 mt-1">Gambar saat ini</p>
-                                    </div>
-                                @endif
+                                <div class="mt-2 mb-3">
+                                    <img src="{{ $restaurant->image_url }}" alt="{{ $restaurant->name }}" class="h-32 w-32 object-cover rounded-lg shadow-sm border border-slate-100">
+                                    <p class="text-xs text-slate-500 mt-1">Gambar saat ini</p>
+                                </div>
                                 <input id="image" name="image" type="file" accept="image/*" class="mt-1 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition file:cursor-pointer" />
                                 <p class="text-xs text-slate-500 mt-1">Biarkan kosong jika tidak ingin mengubah gambar</p>
                                 <x-input-error :messages="$errors->get('image')" class="mt-2" />

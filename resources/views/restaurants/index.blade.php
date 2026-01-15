@@ -66,13 +66,8 @@
                             @forelse ($restaurants as $restaurant)
                                 <tr class="hover:bg-slate-50 transition-colors duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if ($restaurant->image_url)
-                                            <img src="{{ $restaurant->image_url }}" alt="{{ $restaurant->name }}" class="h-16 w-16 object-cover rounded-lg shadow-sm">
-                                        @else
-                                            <div class="h-16 w-16 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400 text-xs font-medium">
-                                                No Img
-                                            </div>
-                                        @endif
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <img src="{{ $restaurant->image_url }}" alt="{{ $restaurant->name }}" class="h-16 w-16 object-cover rounded-lg shadow-sm border border-slate-100">
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="text-sm font-bold text-gray-900">{{ $restaurant->name }}</div>
@@ -110,7 +105,7 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                                 </svg>
                                             </a>
-                                            <form action="{{ route('restaurants.destroy', $restaurant) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus restoran ini?')">
+                                            <form action="{{ route('restaurants.destroy', $restaurant) }}" method="POST" class="inline" onsubmit="confirmDelete(event, '{{ $restaurant->name }}')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="text-red-600 hover:text-red-900 bg-red-50 p-2 rounded-lg hover:bg-red-100 transition" title="Hapus">
@@ -145,4 +140,32 @@
             </div>
         </div>
     </div>
+    
+    <script>
+        function confirmDelete(event, restaurantName) {
+            event.preventDefault();
+            const form = event.target;
+            
+            Swal.fire({
+                title: 'Hapus Restoran?',
+                text: `Anda yakin ingin menghapus "${restaurantName}"? Data yang dihapus tidak dapat dikembalikan.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#10B981', // Emerald-500
+                cancelButtonColor: '#6B7280',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal',
+                background: '#ffffff',
+                customClass: {
+                    popup: 'rounded-xl',
+                    confirmButton: 'px-5 py-2.5 rounded-lg font-medium text-sm',
+                    cancelButton: 'px-5 py-2.5 rounded-lg font-medium text-sm'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }
+    </script>
 </x-app-layout>

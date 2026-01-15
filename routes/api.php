@@ -17,11 +17,13 @@ use Illuminate\Support\Facades\Route;
 // Restaurant API routes
 Route::prefix('restaurants')->group(function () {
     
-    // Public Read Endpoints
-    Route::get('/', [RestaurantController::class, 'index']); // List / Recommendations
-    Route::get('/search', [RestaurantController::class, 'search']);
-    Route::get('/storage/{path}', [RestaurantController::class, 'proxyImage'])->where('path', '.*');
-    Route::get('/{idOrSlug}', [RestaurantController::class, 'show']); // ID or Slug
+    // Public Read Endpoints (Rate Limited: 60 requests/minute)
+    Route::middleware('throttle:60,1')->group(function () {
+        Route::get('/', [RestaurantController::class, 'index']); // List / Recommendations
+        Route::get('/search', [RestaurantController::class, 'search']);
+        Route::get('/storage/{path}', [RestaurantController::class, 'proxyImage'])->where('path', '.*');
+        Route::get('/{idOrSlug}', [RestaurantController::class, 'show']); // ID or Slug
+    });
 
     // Admin / Write Endpoints
     // TODO: These are currently disabled for security. 

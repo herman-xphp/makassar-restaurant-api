@@ -79,6 +79,24 @@ class Restaurant extends Model
      * @param float $userLon User's longitude
      * @return float Distance in kilometers
      */
+    /**
+     * Get the restaurant's image URL.
+     *
+     * @param  string|null  $value
+     * @return string
+     */
+    public function getImageUrlAttribute($value)
+    {
+        return $value ?: '/images/default-restaurant.png';
+    }
+
+    /**
+     * Calculate distance using Haversine formula for a single restaurant
+     *
+     * @param float $userLat User's latitude
+     * @param float $userLon User's longitude
+     * @return float Distance in kilometers
+     */
     public function getDistanceFrom($userLat, $userLon)
     {
         $lat1 = deg2rad($this->latitude);

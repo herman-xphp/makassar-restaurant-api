@@ -1,0 +1,43 @@
+@startuml Use Case API Restoran Makassar
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Pengguna Publik (Pecinta Kuliner)" as g
+note right of g : Menggunakan Aplikasi Mobile / Web Publik
+
+actor "Administrator" as a
+note left of a : Menggunakan Dashboard Web
+
+package "API Restoran Makassar" {
+    package "Fitur Publik" {
+        usecase "Lihat Rekomendasi\n(Jarak Haversine)" as UC_Rec
+        usecase "Cari Restoran\n(Nama, Kuliner, Alamat)" as UC_Search
+        usecase "Lihat Detail Restoran" as UC_View
+        usecase "Lihat Foto" as UC_Photos
+    }
+
+    package "Fitur Admin" {
+        usecase "Login (Masuk)" as UC_Login
+        usecase "Lihat Statistik Dashboard" as UC_Dash
+        usecase "Kelola Restoran\n(Tambah, Ubah, Hapus)" as UC_CRUD
+        usecase "Upload Gambar Restoran" as UC_Upload
+        usecase "Logout (Keluar)" as UC_Logout
+    }
+}
+
+' Interaksi Pengguna Publik
+g --> UC_Rec
+g --> UC_Search
+g --> UC_View
+g --> UC_Photos
+
+' Interaksi Admin
+a --> UC_Login
+a --> UC_Dash
+a --> UC_CRUD
+a --> UC_Upload
+a --> UC_Logout
+
+' Hubungan
+UC_CRUD ..> UC_Upload : <<include>>
+@enduml

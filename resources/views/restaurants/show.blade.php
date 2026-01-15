@@ -21,13 +21,7 @@
                 <div class="p-8">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div class="md:col-span-1">
-                            @if ($restaurant->image_url)
-                                <img src="{{ $restaurant->image_url }}" alt="{{ $restaurant->name }}" class="w-full h-64 object-cover rounded-lg shadow-sm">
-                            @else
-                                <div class="w-full h-64 bg-slate-100 rounded-lg flex items-center justify-center border border-slate-200">
-                                    <span class="text-slate-400 font-medium">Tidak ada gambar</span>
-                                </div>
-                            @endif
+                            <img src="{{ $restaurant->image_url }}" alt="{{ $restaurant->name }}" class="w-full h-64 object-cover rounded-lg shadow-sm border border-slate-100">
                         </div>
 
                         <div class="md:col-span-2 space-y-6">
