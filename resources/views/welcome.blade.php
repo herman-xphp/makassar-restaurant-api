@@ -4,7 +4,26 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Makassar Restaurant - Apps</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>{{ $metaTitle ?? 'Makassar Restaurant - Apps' }}</title>
+    <meta name="description" content="{{ $metaDescription ?? 'Aplikasi pencarian restoran terbaik di Makassar.' }}">
+    <meta name="keywords" content="kuliner makassar, restoran makassar, coto makassar, konro, pallubasa, tempat makan enak makassar">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $metaTitle ?? 'Makassar Restaurant' }}">
+    <meta property="og:description" content="{{ $metaDescription ?? 'Temukan kuliner terbaik di Makassar.' }}">
+    <meta property="og:image" content="{{ asset('images/og-image.jpg') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="{{ $metaTitle ?? 'Makassar Restaurant' }}">
+    <meta property="twitter:description" content="{{ $metaDescription ?? 'Temukan kuliner terbaik di Makassar.' }}">
+    <meta property="twitter:image" content="{{ asset('images/og-image.jpg') }}">
+
     <link rel="icon" href="{{ asset('favicon.ico') }}">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />

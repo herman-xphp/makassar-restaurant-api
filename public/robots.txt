@@ -1,2 +1,7 @@
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /dashboard
+Disallow: /api/
+Allow: /api/restaurants/storage/
+
+Sitemap: {{ url('sitemap.xml') }}
