@@ -16,9 +16,15 @@ use Illuminate\Support\Facades\Route;
 
 // Restaurant API routes
 Route::prefix('restaurants')->group(function () {
-
-    Route::get('/storage/{path}', [RestaurantController::class, 'proxyImage'])->where('path', '.*');
-    Route::get('/recommendations', [RestaurantController::class, 'getRecommendations']);
+    
+    // Public Read Endpoints
+    Route::get('/', [RestaurantController::class, 'index']); // List / Recommendations
     Route::get('/search', [RestaurantController::class, 'search']);
-    Route::apiResource('/', RestaurantController::class)->except(['index', 'create', 'edit']);
+    Route::get('/storage/{path}', [RestaurantController::class, 'proxyImage'])->where('path', '.*');
+    Route::get('/{idOrSlug}', [RestaurantController::class, 'show']); // ID or Slug
+
+    // Admin / Write Endpoints
+    Route::post('/', [RestaurantController::class, 'store']);
+    Route::put('/{id}', [RestaurantController::class, 'update']);
+    Route::delete('/{id}', [RestaurantController::class, 'destroy']);
 });
