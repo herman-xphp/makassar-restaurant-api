@@ -11,6 +11,7 @@ class Restaurant extends Model
 
     protected $fillable = [
         'name',
+        'slug',
         'description',
         'address',
         'latitude',
@@ -21,6 +22,26 @@ class Restaurant extends Model
         'review_count',
         'image_url',
     ];
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::creating(function ($restaurant) {
+            if (empty($restaurant->slug)) {
+                $restaurant->slug = \Illuminate\Support\Str::slug($restaurant->name);
+            }
+        });
+
+        static::updating(function ($restaurant) {
+            if ($restaurant->isDirty('name') && !$restaurant->isDirty('slug')) {
+                $restaurant->slug = \Illuminate\Support\Str::slug($restaurant->name);
+            }
+        });
+    }
 
     protected $casts = [
         'latitude' => 'decimal:8',

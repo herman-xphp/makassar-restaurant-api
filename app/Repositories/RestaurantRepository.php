@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\RestaurantRepositoryInterface;
 use App\Models\Restaurant;
+use Illuminate\Database\Eloquent\Collection;
 
 class RestaurantRepository implements RestaurantRepositoryInterface
 {
@@ -18,43 +19,49 @@ class RestaurantRepository implements RestaurantRepositoryInterface
     }
 
     /**
-     * Get restaurants near a location
+     * Get restaurants near a location using Haversine
      *
-     * @param float $userLat User's latitude
-     * @param float $userLon User's longitude
-     * @param float|null $radius Radius in kilometers
-     * @param int $limit Number of results
-     * @param int $offset Offset for pagination
+     * @param  float  $userLat
+     * @param  float  $userLon
+     * @param  float|null  $radius
+     * @param  int  $limit
+     * @param  int  $offset
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getRestaurantsNearLocation($userLat, $userLon, $radius = null, $limit = 10, $offset = 0)
     {
-        $query = Restaurant::query();
-
-        if ($radius !== null) {
-            $query = $query->near($userLat, $userLon, $radius);
-        } else {
-            $query = $query->near($userLat, $userLon);
-        }
-
-        return $query->offset($offset)->limit($limit)->get();
+        return Restaurant::near($userLat, $userLon, $radius)
+            ->skip($offset)
+            ->take($limit)
+            ->get();
     }
 
     /**
      * Find a restaurant by ID
      *
-     * @param int $id
+     * @param  int  $id
      * @return \App\Models\Restaurant|null
      */
     public function findRestaurantById($id)
     {
         return Restaurant::find($id);
     }
+    
+    /**
+     * Find a restaurant by Slug
+     *
+     * @param  string  $slug
+     * @return \App\Models\Restaurant|null
+     */
+    public function findRestaurantBySlug($slug)
+    {
+        return Restaurant::where('slug', $slug)->first();
+    }
 
     /**
      * Create a new restaurant
      *
-     * @param array $data
+     * @param  array  $data
      * @return \App\Models\Restaurant
      */
     public function createRestaurant(array $data)
@@ -65,93 +72,64 @@ class RestaurantRepository implements RestaurantRepositoryInterface
     /**
      * Update an existing restaurant
      *
-     * @param int $id
-     * @param array $data
+     * @param  int  $id
+     * @param  array  $data
      * @return \App\Models\Restaurant
      */
     public function updateRestaurant($id, array $data)
     {
-        $restaurant = $this->findRestaurantById($id);
-
+        $restaurant = Restaurant::find($id);
         if ($restaurant) {
             $restaurant->update($data);
             return $restaurant;
         }
-
         return null;
     }
 
     /**
      * Delete a restaurant
      *
-     * @param int $id
+     * @param  int  $id
      * @return bool
      */
     public function deleteRestaurant($id)
     {
-        $restaurant = $this->findRestaurantById($id);
-
-        if ($restaurant) {
-            return $restaurant->delete();
-        }
-
-        return false;
+        return Restaurant::destroy($id);
     }
 
     /**
      * Search restaurants by query
      *
-     * @param string $query Search query
-     * @param array $filters Optional filters (cuisine_type, min_rating, etc.)
-     * @param int $limit Number of results to return
-     * @param float|null $userLat User's latitude
-     * @param float|null $userLon User's longitude
-     * @param int $offset Offset for pagination
+     * @param  string  $query
+     * @param  array  $filters
+     * @param  int  $limit
+     * @param  float|null  $userLat
+     * @param  float|null  $userLon
+     * @param  int  $offset
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function searchRestaurants(string $query, array $filters = [], int $limit = 20, $userLat = null, $userLon = null, int $offset = 0)
     {
-        $searchQuery = Restaurant::query();
+        $builder = Restaurant::query();
 
-        // Add distance calculation if location is provided
-        if ($userLat !== null && $userLon !== null) {
-            $searchQuery->selectRaw(
-                "*, (6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))) AS distance",
-                [$userLat, $userLon, $userLat]
-            );
-        }
+        $builder->where(function ($q) use ($query) {
+            $q->where('name', 'like', "%{$query}%")
+              ->orWhere('description', 'like', "%{$query}%")
+              ->orWhere('cuisine_type', 'like', "%{$query}%");
+        });
 
-        // Search in name, description, address, and cuisine_type
-        if (!empty($query)) {
-            $searchQuery->where(function ($q) use ($query) {
-                $q->where('name', 'LIKE', "%{$query}%")
-                  ->orWhere('description', 'LIKE', "%{$query}%")
-                  ->orWhere('address', 'LIKE', "%{$query}%")
-                  ->orWhere('cuisine_type', 'LIKE', "%{$query}%");
-            });
-        }
-
-        // Apply optional filters
+        // Apply filters
         if (!empty($filters['cuisine_type'])) {
-            $searchQuery->where('cuisine_type', 'LIKE', "%{$filters['cuisine_type']}%");
+            $builder->where('cuisine_type', $filters['cuisine_type']);
         }
 
-        if (!empty($filters['min_rating'])) {
-            $searchQuery->where('rating', '>=', (float) $filters['min_rating']);
-        }
-
-        if (!empty($filters['max_rating'])) {
-            $searchQuery->where('rating', '<=', (float) $filters['max_rating']);
-        }
-
-        // Order by distance if location provided, otherwise by rating
-        if ($userLat !== null && $userLon !== null) {
-            $searchQuery->orderBy('distance', 'asc');
+        // Apply sorting
+        if ($userLat && $userLon) {
+             $builder->near($userLat, $userLon);
         } else {
-            $searchQuery->orderBy('rating', 'desc')
-                        ->orderBy('name', 'asc');
+             $builder->orderBy('rating', 'desc');
         }
 
-        return $searchQuery->offset($offset)->limit($limit)->get();
+        return $builder->skip($offset)->take($limit)->get();
     }
 }

@@ -32,6 +32,14 @@ interface RestaurantRepositoryInterface
     public function findRestaurantById($id);
 
     /**
+     * Find a restaurant by Slug
+     *
+     * @param  string  $slug
+     * @return \App\Models\Restaurant|null
+     */
+    public function findRestaurantBySlug($slug);
+
+    /**
      * Create a new restaurant
      *
      * @return \App\Models\Restaurant

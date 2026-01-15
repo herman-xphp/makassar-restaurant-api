@@ -25,6 +25,14 @@ interface RestaurantServiceInterface
     public function getRestaurantById($id);
 
     /**
+     * Get a single restaurant by Slug
+     *
+     * @param string $slug
+     * @return array
+     */
+    public function getRestaurantBySlug($slug);
+
+    /**
      * Create a new restaurant
      *
      * @param array $data
