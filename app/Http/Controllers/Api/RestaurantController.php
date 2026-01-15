@@ -110,11 +110,18 @@ class RestaurantController extends Controller
      */
     public function proxyImage(string $path)
     {
-         $path = storage_path('app/public/' . $path);
-         if (!file_exists($path)) {
+        // Prevent directory traversal
+        if (str_contains($path, '..') || str_contains($path, '/') || str_contains($path, '\\')) {
+             abort(400, 'Invalid path');
+        }
+
+        $filePath = storage_path('app/public/' . $path);
+
+        if (!file_exists($filePath)) {
              abort(404);
-         }
-         return response()->file($path);
+        }
+
+        return response()->file($filePath);
     }
 
     // Admin/Write methods (store, update, destroy) - keeping simple for now, can delegate to Service

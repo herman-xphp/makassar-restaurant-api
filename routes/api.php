@@ -24,7 +24,9 @@ Route::prefix('restaurants')->group(function () {
     Route::get('/{idOrSlug}', [RestaurantController::class, 'show']); // ID or Slug
 
     // Admin / Write Endpoints
-    Route::post('/', [RestaurantController::class, 'store']);
-    Route::put('/{id}', [RestaurantController::class, 'update']);
-    Route::delete('/{id}', [RestaurantController::class, 'destroy']);
+    // TODO: These are currently disabled for security. 
+    // If Mobile Admin is needed, uncomment and secure with 'auth:sanctum'.
+    // Route::post('/', [RestaurantController::class, 'store']);
+    // Route::put('/{id}', [RestaurantController::class, 'update']);
+    // Route::delete('/{id}', [RestaurantController::class, 'destroy']);
 });
