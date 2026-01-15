@@ -80,4 +80,14 @@ class RestaurantService implements RestaurantServiceInterface
     {
         return $this->restaurantRepository->getPaginatedRestaurants($perPage, $search);
     }
+
+    public function getStats()
+    {
+        return $this->restaurantRepository->getStats();
+    }
+
+    public function getPopularRestaurants($limit = 6)
+    {
+        return $this->restaurantRepository->getPopularRestaurants($limit);
+    }
 }
