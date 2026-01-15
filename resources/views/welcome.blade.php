@@ -55,7 +55,7 @@
                             Dashboard
                         </a>
                     @else
-                        <a href="https://www.mediafire.com/file/j5d7v1q36mr7813/Makassar_Restaurant.apk"
+                        <a href="{{ route('login') }}"
                             class="px-5 py-2.5 text-sm font-bold text-emerald-600 bg-emerald-50 border-2 border-emerald-100 hover:bg-emerald-100 rounded-full transition-colors">
                             Masuk
                         </a>
