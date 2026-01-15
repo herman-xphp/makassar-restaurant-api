@@ -14,6 +14,32 @@ class HaversineHelper
      * @param string $unit Distance unit ('km', 'miles', 'm')
      * @return float Distance in specified unit
      */
+    /**
+     * Get the raw SQL for Haversine formula (for Database queries)
+     *
+     * @param float $userLat Latitude of the user
+     * @param float $userLon Longitude of the user
+     * @param string $latColumn Database column for latitude
+     * @param string $lonColumn Database column for longitude
+     * @return string Raw SQL string
+     */
+    public static function getSql($userLat, $userLon, $latColumn = 'latitude', $lonColumn = 'longitude')
+    {
+        return "(6371 * acos(cos(radians($userLat)) * cos(radians($latColumn)) *
+                cos(radians($lonColumn) - radians($userLon)) +
+                sin(radians($userLat)) * sin(radians($latColumn))))";
+    }
+
+    /**
+     * Calculate the distance between two points using the Haversine formula (PHP Calculation)
+     * 
+     * @param float $lat1 Latitude of point 1
+     * @param float $lon1 Longitude of point 1
+     * @param float $lat2 Latitude of point 2
+     * @param float $lon2 Longitude of point 2
+     * @param string $unit Distance unit ('km', 'miles', 'm')
+     * @return float Distance in specified unit
+     */
     public static function calculateDistance($lat1, $lon1, $lat2, $lon2, $unit = 'km')
     {
         // Convert latitude and longitude from degrees to radians

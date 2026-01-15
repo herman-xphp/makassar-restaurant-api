@@ -60,9 +60,7 @@ class Restaurant extends Model
      */
     public function scopeNear($query, $userLat, $userLon, $radius = null)
     {
-        $haversine = "(6371 * acos(cos(radians($userLat)) * cos(radians(latitude)) *
-                    cos(radians(longitude) - radians($userLon)) +
-                    sin(radians($userLat)) * sin(radians(latitude))))";
+        $haversine = \App\Helpers\HaversineHelper::getSql($userLat, $userLon);
 
         $query->selectRaw("*, {$haversine} AS distance")
               ->orderByRaw("{$haversine}");
