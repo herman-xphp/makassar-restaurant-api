@@ -28,20 +28,9 @@ class RestaurantController extends Controller
         return view('restaurants.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreRestaurantRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'address' => 'required|string|max:255',
-            'latitude' => 'required|numeric|between:-90,90',
-            'longitude' => 'required|numeric|between:-180,180',
-            'phone' => 'nullable|string|max:20',
-            'cuisine_type' => 'nullable|string|max:100',
-            'rating' => 'nullable|numeric|between:0,5',
-            'review_count' => 'nullable|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('restaurants', 'public');
@@ -82,24 +71,9 @@ class RestaurantController extends Controller
         return view('restaurants.edit', compact('restaurant'));
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreRestaurantRequest $request, $id)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'address' => 'required|string|max:255',
-            'latitude' => 'required|numeric|between:-90,90',
-            'longitude' => 'required|numeric|between:-180,180',
-            'phone' => 'nullable|string|max:20',
-            'cuisine_type' => 'nullable|string|max:100',
-            'rating' => 'nullable|numeric|between:0,5',
-            'review_count' => 'nullable|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        // For image handling, we might need to fetch the restaurant first
-        // Ideally this logic moves to Service, but for file handling in Controller it's often easier
-        // to keep file upload here and pass string URL to Service.
+        $validated = $request->validated();
         
         $restaurant = $this->restaurantService->getRestaurantById($id);
 

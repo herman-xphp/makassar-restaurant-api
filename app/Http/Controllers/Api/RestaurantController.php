@@ -125,19 +125,10 @@ class RestaurantController extends Controller
     }
 
     // Admin/Write methods (store, update, destroy) - keeping simple for now, can delegate to Service
-    public function store(Request $request): JsonResponse
+    public function store(\App\Http\Requests\StoreRestaurantRequest $request): JsonResponse
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'address' => 'required|string|max:500',
-            'latitude' => 'required|numeric|between:-90,90',
-            'longitude' => 'required|numeric|between:-180,180',
-        ]);
-        
-        // Add basic validation for others if needed
-
-        $restaurant = $this->restaurantService->createRestaurant($request->all());
+        // Data is already validated by StoreRestaurantRequest
+        $restaurant = $this->restaurantService->createRestaurant($request->validated());
 
         return response()->json([
             'success' => true,
